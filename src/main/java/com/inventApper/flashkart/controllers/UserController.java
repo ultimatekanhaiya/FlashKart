@@ -3,6 +3,7 @@ package com.inventApper.flashkart.controllers;
 import com.inventApper.flashkart.dtos.ApiResponseMessage;
 import com.inventApper.flashkart.dtos.UserDto;
 import com.inventApper.flashkart.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,14 +20,14 @@ public class UserController {
 
     //create user
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto user) {
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto user) {
         UserDto userDto = userService.createUser(user);
         return new ResponseEntity<>(userDto, HttpStatus.CREATED);
     }
 
     //update user
     @PutMapping("/{userId}")
-    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto user, @PathVariable String userId) {
+    public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto user, @PathVariable String userId) {
         UserDto userDto = userService.updateUser(user, userId);
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
@@ -41,7 +42,7 @@ public class UserController {
 
     //get all users
     @GetMapping
-    public  ResponseEntity<List<UserDto>> getAll() {
+    public ResponseEntity<List<UserDto>> getAll() {
         return ResponseEntity.ok(userService.getAllUser());
     }
 
