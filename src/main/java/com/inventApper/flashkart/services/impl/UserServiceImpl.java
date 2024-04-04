@@ -18,6 +18,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,6 +33,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ModelMapper mapper;
+
+    @Value("${user.profile.image.path}")
+    private String imagePath;
 
     private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -46,12 +53,13 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(UserDto userDto, String userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
-        User.builder()
-                .name(userDto.getName())
-                .about(userDto.getAbout())
-                .gender(userDto.getGender())
-                .password(userDto.getPassword())
-                .imageName(userDto.getImageName()).build();
+
+        user.setName(userDto.getName());
+        user.setAbout(userDto.getAbout());
+        user.setGender(userDto.getGender());
+        user.setPassword(userDto.getPassword());
+        user.setImageName(userDto.getImageName());
+
         User updatedUser = userRepository.save(user);
         logger.info("User updated with id: " + updatedUser.getUserId());
         return mapper.map(updatedUser, UserDto.class);
@@ -61,6 +69,19 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(String userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
+
+        // delete user profile image
+        try {
+            String fullPath = imagePath + user.getImageName();
+            Files.delete(Paths.get(fullPath));
+        } catch (NoSuchFileException ex) {
+            logger.info("User image not found in folder ");
+            ex.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // delete user
         userRepository.delete(user);
     }
 
