@@ -1,6 +1,7 @@
 package com.inventApper.flashkart.controllers;
 
 import com.inventApper.flashkart.dtos.ApiResponseMessage;
+import com.inventApper.flashkart.dtos.PageableResponse;
 import com.inventApper.flashkart.dtos.UserDto;
 import com.inventApper.flashkart.services.UserService;
 import jakarta.validation.Valid;
@@ -42,8 +43,13 @@ public class UserController {
 
     //get all users
     @GetMapping
-    public ResponseEntity<List<UserDto>> getAll() {
-        return ResponseEntity.ok(userService.getAllUser());
+    public ResponseEntity<PageableResponse<UserDto>> getAllUser(
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "name", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "ASC", required = false) String sortDir) {
+        PageableResponse<UserDto> users = this.userService.getAllUser(pageNumber, pageSize, sortBy, sortDir);
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     //get single user
