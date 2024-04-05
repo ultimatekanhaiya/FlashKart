@@ -2,9 +2,11 @@ package com.inventApper.flashkart.services.impl;
 
 import com.inventApper.flashkart.dtos.PageableResponse;
 import com.inventApper.flashkart.dtos.ProductDto;
+import com.inventApper.flashkart.entities.Category;
 import com.inventApper.flashkart.entities.Product;
 import com.inventApper.flashkart.exceptions.ResourceNotFoundException;
 import com.inventApper.flashkart.helper.Helper;
+import com.inventApper.flashkart.repositories.CategoryRepository;
 import com.inventApper.flashkart.repositories.ProductRepository;
 import com.inventApper.flashkart.services.ProductService;
 import org.modelmapper.ModelMapper;
@@ -30,6 +32,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepo;
+
+    @Autowired
+    private CategoryRepository categoryRepo;
 
     @Autowired
     private ModelMapper mapper;
@@ -115,6 +120,45 @@ public class ProductServiceImpl implements ProductService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Product> page = productRepo.findByTitleContaining(title, pageable);
         return Helper.getPageableResponse(page, ProductDto.class);
+    }
+
+    @Override
+    public PageableResponse<ProductDto> getAllOfCategory(String categoryId, int pageNumber, int pageSize,
+            String sortBy, String sortDir) {
+
+        Category category = categoryRepo.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "Id", categoryId));
+
+        Sort sort = (sortDir.equalsIgnoreCase("asc")) ? (Sort.by(sortBy).ascending()) : (Sort.by(sortBy).descending());
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+        Page<Product> page = productRepo.findByCategory(category, pageable);
+        return Helper.getPageableResponse(page, ProductDto.class);
+    }
+
+    @Override
+    public ProductDto createWithCategory(ProductDto productDto, String categoryId) {
+
+        // fetch Category
+        Category category = categoryRepo.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "Id", categoryId));
+        String id = UUID.randomUUID().toString();
+        productDto.setProductId(id);
+        Product product = mapper.map(productDto, Product.class);
+        product.setAddedDate(new Date());
+        product.setCategory(category);
+        return mapper.map(productRepo.save(product), ProductDto.class);
+    }
+
+    @Override
+    public ProductDto updateCategory(String productId, String categoryId) {
+
+        Product product = productRepo.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "Id", productId));
+        Category category = categoryRepo.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "Id", categoryId));
+        product.setCategory(category);
+        return mapper.map(productRepo.save(product), ProductDto.class);
     }
 
 }

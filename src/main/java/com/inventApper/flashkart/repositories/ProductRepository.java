@@ -1,5 +1,6 @@
 package com.inventApper.flashkart.repositories;
 
+import com.inventApper.flashkart.entities.Category;
 import com.inventApper.flashkart.entities.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,5 +12,8 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     Page<Product> findByTitleContaining(String title, Pageable pageable);
 
     Page<Product> findByLiveTrue(Pageable pageable);
+
+    // get by category
+    Page<Product> findByCategory(Category category, Pageable pageable);
 
 }
