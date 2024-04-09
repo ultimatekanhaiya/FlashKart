@@ -2,9 +2,11 @@ package com.inventApper.flashkart.services.impl;
 
 import com.inventApper.flashkart.dtos.PageableResponse;
 import com.inventApper.flashkart.dtos.UserDto;
+import com.inventApper.flashkart.entities.Role;
 import com.inventApper.flashkart.entities.User;
 import com.inventApper.flashkart.exceptions.ResourceNotFoundException;
 import com.inventApper.flashkart.helper.Helper;
+import com.inventApper.flashkart.repositories.RoleRepository;
 import com.inventApper.flashkart.repositories.UserRepository;
 import com.inventApper.flashkart.services.UserService;
 import org.modelmapper.ModelMapper;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -37,13 +40,31 @@ public class UserServiceImpl implements UserService {
     @Value("${user.profile.image.path}")
     private String imagePath;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Value("${normal.role.id}")
+    private String normalRoleId;
+
+
     private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
     public UserDto createUser(UserDto userDto) {
         String userId = UUID.randomUUID().toString();
         userDto.setUserId(userId);
+        //encoding password
+        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         User user = mapper.map(userDto, User.class);
+
+        // fetch role of the normal user and set it to user
+        Role normalRole = roleRepository.findById(normalRoleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Role", "Id", normalRoleId));
+        user.getRoles().add(normalRole);
+
         User savedUser = userRepository.save(user);
         logger.info("User saved with id: " + savedUser.getUserId());
         return mapper.map(savedUser, UserDto.class);
@@ -57,7 +78,7 @@ public class UserServiceImpl implements UserService {
         user.setName(userDto.getName());
         user.setAbout(userDto.getAbout());
         user.setGender(userDto.getGender());
-        user.setPassword(userDto.getPassword());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setImageName(userDto.getImageName());
 
         User updatedUser = userRepository.save(user);

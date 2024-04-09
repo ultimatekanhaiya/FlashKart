@@ -4,11 +4,10 @@ import com.inventApper.flashkart.validate.ImageNameValid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -38,4 +37,5 @@ public class UserDto {
     @ImageNameValid
     private String imageName;
 
+    private Set<RoleDto> roles = new HashSet<>();
 }
