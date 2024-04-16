@@ -50,6 +50,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request.requestMatchers("/auth/login").permitAll())
+                .authorizeHttpRequests(request -> request.requestMatchers("/auth/google").permitAll())
                 .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, "/users").permitAll())
                 .authorizeHttpRequests(
                         request -> request.requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN"))

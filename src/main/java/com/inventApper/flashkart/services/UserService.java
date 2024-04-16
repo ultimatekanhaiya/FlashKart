@@ -2,8 +2,10 @@ package com.inventApper.flashkart.services;
 
 import com.inventApper.flashkart.dtos.PageableResponse;
 import com.inventApper.flashkart.dtos.UserDto;
+import com.inventApper.flashkart.entities.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -30,4 +32,5 @@ public interface UserService {
 
     // other user specific
 
+    Optional<User> findUserByEmailOptional(String email);
 }

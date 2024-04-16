@@ -19,7 +19,7 @@ public class CreateOrderRequest {
     @NotBlank(message = "billingAddress is required !!")
     private String billingAddress;
 
-    @NotBlank(message = "billingCity is required !!")
+    @NotBlank(message = "billingPhone is required !!")
     private String billingPhone;
 
     @NotBlank(message = "billingName is required !!")
