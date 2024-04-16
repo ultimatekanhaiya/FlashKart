@@ -6,6 +6,7 @@ import com.inventApper.flashkart.dtos.PageableResponse;
 import com.inventApper.flashkart.dtos.ProductDto;
 import com.inventApper.flashkart.services.FileService;
 import com.inventApper.flashkart.services.ProductService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import java.io.InputStream;
 
 @RestController
 @RequestMapping("/products")
+@SecurityRequirement(name="scheme1")
 public class ProductController {
 
     @Autowired

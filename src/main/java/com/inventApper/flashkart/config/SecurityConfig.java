@@ -36,6 +36,14 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthenticationFilter authenticationFilter;
 
+    private final String[] PUBLIC_URLS = {
+
+            "/swagger-ui/**",
+            "/webjars/**",
+            "/swagger-resources/**",
+            "/v3/api-docs"
+    };
+
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -54,6 +62,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, "/users").permitAll())
                 .authorizeHttpRequests(
                         request -> request.requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN"))
+                .authorizeHttpRequests(request -> request.requestMatchers(PUBLIC_URLS).permitAll())
                 .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.GET).permitAll())
                 .authorizeHttpRequests(request -> request.anyRequest().authenticated())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authenticationEntryPoint))

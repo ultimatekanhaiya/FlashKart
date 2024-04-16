@@ -4,6 +4,7 @@ import com.inventApper.flashkart.dtos.*;
 import com.inventApper.flashkart.services.CategoryService;
 import com.inventApper.flashkart.services.FileService;
 import com.inventApper.flashkart.services.ProductService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -23,6 +24,7 @@ import java.io.InputStream;
 
 @RestController
 @RequestMapping("/categories")
+@SecurityRequirement(name="scheme1")
 public class CategoryController {
 
     @Autowired

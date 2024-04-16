@@ -1,6 +1,7 @@
 package com.inventApper.flashkart.dtos;
 
 import com.inventApper.flashkart.validate.ImageNameValid;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -19,6 +20,7 @@ public class UserDto {
     private String userId;
 
     @Size(min = 3, max = 20, message = "Invalid Name length !!")
+    @Schema( name = "username", accessMode = Schema.AccessMode.READ_ONLY, description = "user name of new user !!")
     private String name;
 
     @Pattern(regexp = "^[a-z0-9][-a-z0-9._]+@([-a-z0-9]+\\.)+[a-z]{2,5}$", message = "Invalid Email")

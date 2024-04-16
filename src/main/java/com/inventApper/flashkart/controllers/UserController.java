@@ -6,6 +6,11 @@ import com.inventApper.flashkart.dtos.PageableResponse;
 import com.inventApper.flashkart.dtos.UserDto;
 import com.inventApper.flashkart.services.FileService;
 import com.inventApper.flashkart.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -25,6 +30,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@SecurityRequirement(name="scheme1")
+@Tag(name = "UserController", description = "REST APIs related to perform user operations !!")
 public class UserController {
 
     @Autowired
@@ -40,6 +47,12 @@ public class UserController {
 
     // create user
     @PostMapping
+    @Operation(summary = "create new user !!", description = "this is user api")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success | OK"),
+            @ApiResponse(responseCode = "401", description = "not authorized !!"),
+            @ApiResponse(responseCode = "201", description = "new user created !!")
+    })
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto user) {
         UserDto userDto = userService.createUser(user);
         return new ResponseEntity<>(userDto, HttpStatus.CREATED);

@@ -2,6 +2,7 @@ package com.inventApper.flashkart.controllers;
 
 import com.inventApper.flashkart.dtos.*;
 import com.inventApper.flashkart.services.OrderService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
+@SecurityRequirement(name="scheme1")
 public class OrderController {
 
     @Autowired

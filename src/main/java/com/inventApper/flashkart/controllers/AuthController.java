@@ -11,6 +11,8 @@ import com.inventApper.flashkart.entities.User;
 import com.inventApper.flashkart.exceptions.BadApiRequestException;
 import com.inventApper.flashkart.security.JwtHelper;
 import com.inventApper.flashkart.services.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +36,8 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
+@SecurityRequirement(name="scheme1")
+@Tag(name = "AuthController", description = "APIs for Authentication!!")
 public class AuthController {
 
     @Autowired
