@@ -1,4 +1,4 @@
-package com.inventApper.flashkart.services;
+package com.inventApper.flashkart.services.impl;
 
 import com.inventApper.flashkart.entities.User;
 import com.inventApper.flashkart.exceptions.ResourceNotFoundException;

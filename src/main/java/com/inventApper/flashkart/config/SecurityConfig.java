@@ -57,7 +57,7 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(request -> request.requestMatchers("/auth/login").permitAll())
+                .authorizeHttpRequests(request -> request.requestMatchers("/auth/login", "/cloudinary/upload").permitAll())
                 .authorizeHttpRequests(request -> request.requestMatchers("/auth/google").permitAll())
                 .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, "/users").permitAll())
                 .authorizeHttpRequests(
