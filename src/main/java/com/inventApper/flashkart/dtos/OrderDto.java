@@ -34,4 +34,6 @@ public class OrderDto {
     private Date deliveredDate;
 
     private List<OrderItemDto> orderItems = new ArrayList<>();
+
+    private UserDto user;
 }
